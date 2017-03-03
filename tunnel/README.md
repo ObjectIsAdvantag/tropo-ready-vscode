@@ -11,9 +11,23 @@ Tropo Ready uses Caddy and ngrok to make your scripts accessible from the Tropo 
 Download the [Caddy](https://caddyserver.com/download) and [ngrok](https://ngrok.com/download) on your machine, 
 and add the executables to your path.
 
-Then type `cd tunnel & make`.
+Then open a terminal, enter the tunnel directory, and launch caddy.
+Open a second terminal and launch ngrok:
 
-Reach to the ngrok window to retrieve your newly exposed https endpoint.
+```shell
+# in the first terminal window, type
+> cd tunnel
+> caddy
+
+# in the second terminal window, type
+> ngrok http 8763
+```
+
+As a alternative, you can use the make command in VS Code terminal:
+- `cd tunnel; make start` on a Mac machine.
+- `cd tunnel & make` on a Windows machine if you have installed the make command.
+
+Reach to the ngrok terminal to retrieve your newly exposed https endpoint.
 
 ![](../docs/launch-caddy-ngrok-combo.png)
 

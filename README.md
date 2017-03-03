@@ -26,10 +26,10 @@ Note that Tropo Ready proposes other launch configurations, pick the one that su
 
 ## Tropo scripts Testing
 
-Install the tropoready command on your machine.
+Install the tropoready command on your machine, the command comes with the tropo-emulator-js project).
 
 ```shell
-> npm install tropo-emulator -g
+> npm install tropo-emulator-js -g
 # Check it is working ok
 > tropoready -v
 v0.1.0
