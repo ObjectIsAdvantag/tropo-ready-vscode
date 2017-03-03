@@ -10,8 +10,13 @@ This set of samples will be extended with scripts contributed to enhanced the em
 
 ## Quick start
 
-Run `make run` to see samples executions via the Tropo emulator.
+Run `make` to see the samples executed by the Tropo emulator.
 
-Tip: look at the launch arguments for Inbound/Outbound & Voice/SMS samples.
+Tip: look at the [Makefile](Makefile) for examples of Inbound/Outbound & Voice/SMS Tropo calls made via the emulator.
 
-
+```shell
+node ../lib/emulator.js tutorial/13-callerid-reject.js --callerID "4075551111"
+node ../lib/emulator.js bidirectional-sms.js --outbound --parameters "toNumber=+33678007800" 
+node ../lib/emulator.js bidirectional-sms.js --SMS --initialText "yes"
+node ../lib/emulator.js send-sms.js --outbound --parameters "toNumber=+33678007800" "msg=hello friends"
+```
