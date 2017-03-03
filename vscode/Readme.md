@@ -9,10 +9,25 @@ To install the Tropo Ready customizations:
 
 1. copy the launch.json, settings.json, tasks.json file to your workspace's ".vscode/" folder 
 
-2. install the tropoready command on your local machine
+2. [optional] install the tropoready command on your local machine, if you want to use the Tropo Ready Tasks
    ```shell
-   > npm install tropoready -g
+   > npm install tropo-emulator -g
+   # Check it is working ok
+   > tropoready -v
+   v0.1.0
    ```
 
-3.  customize the settings.json file
+3. [optional] customize the settings.json file to suit your local environment and Tropo testing purposes
 
+4. [optional] add the `ctrl+y` shortcut to easilly access the Tropo Ready tasks
+
+   Open your Keyboard shortcut preferences, and add the following: 
+   ```json
+    [
+        {
+            "key": "ctrl+y",
+            "command": "workbench.action.tasks.runTask",
+            "when": "editorTextFocus"
+        }
+    ]
+    ```
