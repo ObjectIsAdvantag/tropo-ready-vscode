@@ -1,0 +1,9 @@
+
+# Node artefacts
+node_modules
+
+# Local directory
+work
+
+# Docs
+*.pptx

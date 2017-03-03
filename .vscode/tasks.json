@@ -1,0 +1,76 @@
+// To install the TropoReady Tasks, 
+//    - copy this file to the .vscode/ folder of your workspace
+//    - install the tropoready command: 
+//          > npm install tropoready -g
+//
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "0.1.0",
+    "command": "tropoready",
+    "isShellCommand": true,
+    "showOutput": "always",
+    "suppressTaskName": true,
+    "tasks": [
+
+        // This task pushes the current file to the tunnel to make it accessible from the Tropo Scripting Cloud platform
+        // Hit ctrl-B to run this task automatically 
+        {
+            "taskName": "Push to Tropo tunnel (ctrl+B)",
+            "command": "cp",
+            "args": [
+                "-v",
+                "${relativeFile}",
+                "${workspaceRoot}/${config.tropoready.liveFilename}"
+            ],
+            "isBuildCommand": true,
+            "showOutput": "always"
+        },
+
+        // The tasks below help you test your script in a terminal window
+        // Hit ctrl-P Tasks and ctrl-y if you have install the key bindings to open this list of tasks
+        {
+            "taskName": "Inbound Voice Tropo test",
+            "args": [
+                "--script",
+                "${relativeFile}",
+                "--callerID",
+                "${config.tropoready.callerID}"
+            ]
+        },
+        {
+            "taskName": "Inbound SMS Tropo test",
+            "args": [
+                "--script",
+                "${relativeFile}",
+                "--callerID",
+                "${config.tropoready.callerID}",
+                "--SMS",
+                "--initialText",
+                "yes"
+            ]
+        },
+        {
+            "taskName": "Outbound Voice Tropo test",
+            "args": [
+                "--script",
+                "${relativeFile}",
+                "--outbound",
+                "--parameters",
+                "toNumber=${config.tropoready.toNumber}"
+            ]
+        },
+        {
+            "taskName": "Outbound SMS Tropo test",
+            "args": [
+                "--script",
+                "${relativeFile}",
+                "--outbound",
+                "--SMS",
+                "--parameters",
+                "toNumber=${config.tropoready.toNumber}",
+                "msg=Welcome to Tropo Ready!"
+            ]
+        }
+    ]
+}

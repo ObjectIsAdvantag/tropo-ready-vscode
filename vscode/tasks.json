@@ -1,0 +1,37 @@
+// To install these Launch Configurations, copy this file to your .vscode/ folder
+
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "0.1.0",
+    "command": "tropoready",
+    "isShellCommand": true,
+    "showOutput": "always",
+    "suppressTaskName": true,
+    "tasks": [
+        {
+            "taskName": "Inbound Voice (local test)",
+            "args": ["--script", "${relativeFile}", "--callerID", "${config.tropoready.callerID}"]
+        },
+         {
+            "taskName": "Inbound SMS (local test)",
+            "args": ["--script", "${relativeFile}", "--callerID", "${config.tropoready.callerID}", "--SMS", "--initialText", "yes"]
+        },
+        {
+            "taskName": "Outbound Voice (local test)",
+            "args": ["--script", "${relativeFile}", "--outbound", "--parameters" , "toNumber=${config.tropoready.toNumber}"]
+        }
+        ,
+        {
+            "taskName": "Outbound SMS (local test)",
+            "args": ["--script", "${relativeFile}", "--outbound", "--SMS", "--parameters" , "toNumber=${config.tropoready.toNumber}", "msg=Welcome to Tropo Ready!"]
+        },
+        {
+            "taskName": "Publish on tunnel (ctrl+B) ",
+            "command": "cp",
+            "args": ["-v", "${relativeFile}", "${workspaceRoot}/${config.tropoready.liveFilename}"],
+            "isBuildCommand": true,
+            "showOutput": "always"
+        }
+    ]
+}

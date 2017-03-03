@@ -1,0 +1,8 @@
+// To install these key bindings, open Preferences > Keyboard shortcuts
+[
+    {
+        "key": "ctrl+y",
+        "command": "workbench.action.tasks.runTask",
+        "when": "editorTextFocus"
+    }
+]
