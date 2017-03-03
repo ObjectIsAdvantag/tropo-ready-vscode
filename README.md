@@ -1,4 +1,4 @@
-# Tropo Ready for VSCode: the live coding experience for Tropo
+# Tropo Ready for VS Code: the live coding experience for Tropo
 
 Execute, Test or Debug your Tropo scripts from your local machine, thanks to a set of handy tools:
 - have Tropo instantly run your local scripts thanks to the [Caddy+ngrok combo](tunnel/README.md)

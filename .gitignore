@@ -3,7 +3,7 @@
 node_modules
 
 # Local directory
-work
+emulator
 
 # Docs
 *.pptx
