@@ -1,13 +1,12 @@
 {
   "name": "tropo-ready-vscode",
-  "version": "0.1.0",
-  "description": "Tropo Ready for VSCode, the live coding experience for Tropo",
-  "main": "index.js",
+  "version": "0.2.0",
+  "description": "Tropo Ready for VS Code: the live coding experience for Tropo",
   "directories": {
     "doc": "docs"
   },
   "dependencies": {
-    "command-line-args": "^4.0.1"
+    "tropo-emulator-js": "^0.1.1"
   },
   "devDependencies": {},
   "scripts": {

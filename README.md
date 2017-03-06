@@ -5,15 +5,30 @@ Execute, Test or Debug your Tropo scripts from your local machine, thanks to a s
 - check your scripts are consistent before pushing them to Tropo (Javascript only)
 - use Launch configurations to debug your Tropo scripts within Visual Studio Code (Javascript only)
 
+Quickstart
+```shell
+> git clone https://github.com/ObjectIsAdvantag/tropo-ready-vscode
+> cd tropo-ready-vscode
+> npm install
+
+# Add the tropoready command to check script inconsistencies from the command line
+> npm install tropo-emulator-js -g
+> tropoready -v
+v0.1.1
+
+# Now launch VS Code, open samples/tutorial/02-askforinput.js, and press F5
+> code .
+```
+
 ![Tropo Ready Big Picture](docs/tropo-ready-big-picture.png)
 
 
 
 ## Tropo scripts Debugging
 
-Type `npm install` in the VS Code terminal.
+_If not already done, type npm install on the command line._
 
-Then Reach to a provided Tropo script sample, such as [02-askforinput](samples/tutorial/02-askforinput.js)
+Reach to a provided Tropo script sample, such as [02-askforinput](samples/tutorial/02-askforinput.js)
 
 Add a breakpoint on line 9 for example, and press F5 to start a debugging session.
 
@@ -26,35 +41,35 @@ Note that Tropo Ready proposes other launch configurations, pick the one that su
 
 ## Tropo scripts Testing
 
-Install the tropoready command on your machine, the command comes with the tropo-emulator-js project).
+_If not already done, install the `tropoready` command on your machine, the command comes with the tropo-emulator-js project)._
 
 ```shell
 > npm install tropo-emulator-js -g
 # Check it is working ok
 > tropoready -v
-v0.1.0
+v0.1.1
 ```
 
-Now, open a provided Tropo script sample, such as [02-askforinput](samples/tutorial/02-askforinput.js), 
+Open a provided Tropo script sample, such as [02-askforinput](samples/tutorial/02-askforinput.js), 
 
 Launch the Tropo Ready tasks by pressing `ctrl+P`, enter `Tasks: Run task` and select `Inbound Voice Tropo test`.
 
 Look at the test results in the Output window.
 
-Optionally, [install the ctrl+y key binding](vscode/README.md) to easilly reach to the Tropo Ready Tasks.
+Optionally, [install the ctrl+shift+y key binding](vscode/README.md) to easilly reach to the Tropo Ready Tasks.
 
 
 ## Tropo scripts Live Execution
 
-Follow these [instructions to create a live tunnel](tunnel/README.md) to the Tropo Cloud platform.
+Follow these [instructions to start a live tunnel](tunnel/README.md) to the Tropo Cloud platform.
 
-Then press ctrl+B to push your script.
+Then press ctrl+shift+y to publish your script to Tropo. 
 
 
 ## Add Tropo Ready to an existing workspace
 
-If you want to add the Tropo Ready customizations to an existing Visual Studio Code Workspace,
-check instructions from the [vscode folder](vscode/README.md).
+If you want to add the Tropo Ready customizations to an existing VS Code Workspace,
+check instructions in the [vscode folder](vscode/README.md).
 
 
 

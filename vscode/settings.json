@@ -1,7 +1,7 @@
 // To install these Launch Configurations, copy this file to your .vscode/ folder
 {
     // where the emulator lies
-    "tropoready.emulator":"lib/emulator.js",
+    "tropoready.emulator":"node_modules/tropo-emulator-js/lib/emulator.js",
 
     // destination of the ctrl+B command, so that the current file being edited gets accessed by Tropo vi the tunnel
     "tropoready.liveFilename":"tunnel/tropo/live.js",   
