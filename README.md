@@ -1,9 +1,9 @@
-# Tropo Ready for VS Code
+# Tropo Ready: the live coding experience for Tropo Scripting
 
 Execute, Test or Debug your Tropo scripts from your local machine, thanks to a set of handy tools:
-- have Tropo instantly execute your scripts thanks to a [Caddy+ngrok combo](tunnel/README.md)
-- check your scripts are consistent before pushing them to Tropo (Javascript only)
-- use Launch configurations to debug your Tropo scripts within Visual Studio Code (Javascript only)
+- have Tropo Scripting execute your local scripts thanks to a [Caddy+ngrok combo](#tropo-scripts-live-execution)
+- debug your scripts thanks to the [Tropo Emulator for Javascript](#tropo-scripts-debugging)
+- check your [JS scripts are consistent](#tropo-scripts-testing) before pushing them to Tropo
 
 ![Tropo Ready Big Picture](docs/tropo-ready-big-picture.png)
 
@@ -18,7 +18,6 @@ Execute, Test or Debug your Tropo scripts from your local machine, thanks to a s
 # Add the tropoready command to check script inconsistencies from the command line
 > npm install tropo-emulator-js -g
 > tropoready -v
-v0.1.1
 
 # Now launch VS Code, open samples/tutorial/02-askforinput.js, and press F5
 > code .
@@ -48,7 +47,6 @@ _If not already done, install the `tropoready` command on your machine (the comm
 > npm install tropo-emulator-js -g
 # Check it is working ok
 > tropoready -v
-v0.1.1
 ```
 
 Open a provided Tropo script sample, such as [02-askforinput](samples/tutorial/02-askforinput.js), 
