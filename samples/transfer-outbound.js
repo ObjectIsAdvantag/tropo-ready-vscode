@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009 - 2015 Tropo, now part of Cisco
+ * Copyright (c) 2017 Tropo, now part of Cisco
  * Released under the MIT license. See the file LICENSE
  * for the complete license
  */

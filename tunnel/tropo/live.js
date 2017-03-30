@@ -14,4 +14,3 @@ if (result.name == 'choice') {
 }
 
 hangup();
-

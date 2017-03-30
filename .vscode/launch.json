@@ -5,42 +5,87 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Tropo Inbound Voice",
+            "name": "Inbound Voice",
             "program": "${workspaceRoot}/${config.tropoready.emulator}",
-            "cwd": "${workspaceRoot}",  
-            "args": ["--script", "${relativeFile}", "--callerID", "${config.tropoready.callerID}"],
-            "console":"internalConsole",
-            "internalConsoleOptions":"openOnSessionStart"
+            "cwd": "${workspaceRoot}",
+            "args": [
+                "--script",
+                "${relativeFile}",
+                "--callerID",
+                "${config.tropoready.callerID}"
+            ],
+            "console": "internalConsole",
+            "internalConsoleOptions": "openOnSessionStart"
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "Tropo Inbound SMS",
+            "name": "Inbound SMS",
             "program": "${workspaceRoot}/${config.tropoready.emulator}",
-            "cwd": "${workspaceRoot}",  
-            "args": ["--script", "${relativeFile}", "--SMS", "--initialText" , "${config.tropoready.initialText}", "--callerID", "${config.tropoready.callerID}"],
-            "console":"internalConsole",
-            "internalConsoleOptions":"openOnSessionStart"
+            "cwd": "${workspaceRoot}",
+            "args": [
+                "--script",
+                "${relativeFile}",
+                "--SMS",
+                "--initialText",
+                "${config.tropoready.initialText}",
+                "--callerID",
+                "${config.tropoready.callerID}"
+            ],
+            "console": "internalConsole",
+            "internalConsoleOptions": "openOnSessionStart"
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "Tropo Outbound Voice",
+            "name": "Outbound Voice",
             "program": "${workspaceRoot}/${config.tropoready.emulator}",
-            "cwd": "${workspaceRoot}",  
-            "args": ["--script", "${relativeFile}", "--outbound", "--parameters" , "toNumber=${config.tropoready.toNumber}"],
-            "console":"internalConsole",
-            "internalConsoleOptions":"openOnSessionStart"
+            "cwd": "${workspaceRoot}",
+            "args": [
+                "--script",
+                "${relativeFile}",
+                "--outbound",
+                "--parameters",
+                "toNumber=${config.tropoready.toNumber}"
+            ],
+            "console": "internalConsole",
+            "internalConsoleOptions": "openOnSessionStart"
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "Tropo Outbound SMS",
+            "name": "Outbound SMS",
             "program": "${workspaceRoot}/${config.tropoready.emulator}",
-            "cwd": "${workspaceRoot}",  
-            "args": ["--script", "${relativeFile}", "--outbound", "--SMS", "--parameters" , "toNumber=${config.tropoready.toNumber}", "msg=Welcome to Tropo Ready!"],
-            "console":"internalConsole",
-            "internalConsoleOptions":"openOnSessionStart"
+            "cwd": "${workspaceRoot}",
+            "args": [
+                "--script",
+                "${relativeFile}",
+                "--outbound",
+                "--SMS",
+                "--parameters",
+                "toNumber=${config.tropoready.toNumber}",
+                "msg=Welcome to Tropo Ready!"
+            ],
+            "console": "internalConsole",
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Text my Github stars",
+            "program": "${workspaceRoot}/${config.tropoready.emulator}",
+            "cwd": "${workspaceRoot}",
+            "args": [
+                "--script",
+                "samples/text-my-github-stars",
+                "--SMS",
+                "--initialText",
+                "CiscoDevNet awesome-ciscospark",
+                "--callerID",
+                "${config.tropoready.callerID}"
+            ],
+            "console": "internalConsole",
+            "internalConsoleOptions": "openOnSessionStart"
         }
     ]
 }
