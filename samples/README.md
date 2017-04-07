@@ -21,6 +21,6 @@ Tip: look at the [Makefile](Makefile) for examples of Inbound/Outbound & Voice/S
 > tropoready bidirectional-sms.js --outbound --parameters "toNumber=+33678007800" 
 > tropoready bidirectional-sms.js --SMS --initialText "yes"
 > tropoready send-sms.js --outbound --parameters "toNumber=+33678007800" "msg=hello friends"
-> tropoready trequest/speak-my-github-stars.js --callerID "+336780078XX"
-> tropoready trequest/text-my-github-stars.js --SMS --initialText "CiscoDevNet awesome-ciscospark"
+> tropoready request/speak-my-github-stars.js --callerID "+336780078XX"
+> tropoready request/text-my-github-stars.js --SMS --initialText "CiscoDevNet awesome-ciscospark"
 ```

@@ -5,7 +5,7 @@
 
     // destination of the ctrl+B command, so that the current file being edited gets accessed by Tropo vi the tunnel
     "tropoready.liveFilename":"tunnel/tropo/live.js",   
-    
+
     // the default callerID for testing purpose
     "tropoready.callerID":"+336780078XX",               
 

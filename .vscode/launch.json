@@ -77,7 +77,7 @@
             "cwd": "${workspaceRoot}",
             "args": [
                 "--script",
-                "samples/text-my-github-stars",
+                "samples/request/text-my-github-stars.js",
                 "--SMS",
                 "--initialText",
                 "CiscoDevNet awesome-ciscospark",

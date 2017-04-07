@@ -1,17 +1,11 @@
 {
   "name": "tropo-ready-vscode",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "Tropo Ready for VS Code: the live coding experience for Tropo",
-  "directories": {
-    "doc": "docs"
-  },
   "dependencies": {
-    "tropo-emulator-js": "^0.2.2"
+    "tropo-emulator-js": "^0.3.0"
   },
   "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ObjectIsAdvantag/tropo-ready-vscode.git"
