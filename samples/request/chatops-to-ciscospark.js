@@ -140,56 +140,70 @@ function request(method, url, options) {
 //
 ///////////////////////////////////////////////////////////////////////////////////////
 
-
-// 
-// This script speaks the current number of stars for a github project
-//    - star/unstar the project on github and listen to the changes in real time
-//    - uses the trequest library to forge HTTP requests
 //
-
-answer();
-wait(1000);
-
-say("Welcome to Github Stars !")
-wait(1000);
-
-say("Asking GitHub...")
-
-var account = "ObjectIsAdvantag";
-var project = "tropo-ready-vscode";
-var result = request("GET", "https://api.github.com/repos/" + account + "/" + project, {
-    headers: {
-        // Github administrative rule: mandatory User-Agent header (http://developer.github.com/v3/#user-agent-required
-        'User-Agent': 'Tropo Scripting'
-    },
-    timeout: 10000,
-    onTimeout: function () {
-        log("could not contact Github, timeout");
-        say("sorry could not contact Github, try again later...");
-        hangup();
-    },
-    onError: function (err) {
-        log("could not contact Github, err: " + err.message);
-        say("sorry could not contact Github, try again later...");
-        hangup();
+// Cisco Spark ChatOps
+//
+function ChatOps(token, roomId) {
+    if (!token || !roomId) {
+        log("CHATOPS: bad arguments, will not log");     
     }
-});
-
-if (result.type == "response") {
-    switch (result.response.statusCode) {
-        case 200:
-            var info = JSON.parse(result.response.body);
-            log("fetched " + info.stargazers_count + " star(s)");
-            say("Congrats, your project counts " + info.stargazers_count + " stars.")
-            wait(1000);
-            break;
-        default:
-            log("github returned statusCode: " + result.response.statusCode);
-            say("Sorry, could not retreive your project stars");
-            wait(1000);
-            break;
+    else {
+        this.token = token;
+        this.roomId = roomId;
     }
 }
 
-say("Bye bye...")
-wait(500);
+// Logs a message to a Cisco Spark room in markdown by default
+//    - isText: boolean to push your message as raw text
+ChatOps.prototype.log = function(msg, isText) {
+    if (!this.token || !this.roomId || !msg) {
+        return;
+    }
+
+    var payload = { roomId: this.roomId };
+    if (isText) {
+        payload.text = msg;
+    }
+    else {
+        payload.markdown = msg;
+    }
+
+    var result = request("POST", "https://api.ciscospark.com/v1/messages", {
+        headers: {
+            "Authorization" : "Bearer " + this.token
+        },
+        json: true,
+        body: payload,
+        timeout: 10000,
+        onTimeout: function () {
+            log("CHATOPS: could not contact CiscoSpark, timeout");
+        },
+        onError: function (err) {
+            log("CHATOPS: could not contact CiscoSpark, err: " + err.message);
+        },
+        onResponse: function (response) {
+            if (response.statusCode != 200) {
+                log("CHATOPS: could not log to CiscoSpark");
+                log("CHATOPS: statusCode: " + response.statusCode);
+                log("CHATOPS: message: " + JSON.parse(response.body).message);
+            }
+        }
+    });
+}
+
+if (currentCall) { 
+    say("Sorry this Tropo ChatOps script does Outbound only");
+
+    // Here are some guidelines to do ChatOps for Tropo Inbound calls
+    //   - Create a bot account and paste its access token 
+    var sparkToken = "MzFhMmNjMzMtM2Y0OS00Mjg4LTg0NDQtM2Y4YjA3MTA2NWEwOTcyZGUwOGQtY2I0";
+    //   - Create a room, and paste the room id here
+    var sparkRoom = "ROOM_IDENTIFIER"; 
+    // and don't forget to add the bot to the roomId
+    var chatops = new ChatOps(sparkToken, sparkRoom);
+    chatops.log("New incoming call from " + currentCall.callerID);    
+}
+else { // OutBound call from Application's token URL
+    var chatops = new ChatOps(sparkToken, sparkRoom);
+    chatops.log("Tropo ChatOps script v0.1");    
+}

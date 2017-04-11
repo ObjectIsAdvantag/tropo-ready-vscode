@@ -6,25 +6,26 @@
 
 
 ////////////////////////////////////////////////////////////////////////////////////
-// request: a synchronous HTTP client library for Tropo, built in the "request" style
+// request: a synchronous HTTP client library for Tropo, built in the 'request' style
 //
 // forges an HTTP request towards the specified URL, and invokes the callback
-//
-// options lets you specify HTTP headers and a read/connect timeout
-//      - method: GET, 
-//      - url: destination
-//      - headers: set of HTTP key/values pairs
-//      - timeout: applies Connect and Read timeouts
-//      - onTimeout, onError, onResponse
+//      - method: GET, POST, PUT, DELETE or PATCH
+//      - url: Http endpoint you wish to hit
+//      - options lets you specify HTTP headers, timeouts... and callbacks
+//            * headers: set of HTTP key/values pairs
+//            * timeout: enforces Connect and Read timeouts, defaults to 10s
+//            * onTimeout(): fired if the timeout  expires
+//            * onError(err): fires if an error occured
+//            * onResponse(response): fires if the request is successful, see below for Response structure
 //
 // returns a result object with properties :
 //      - type: 'response', 'error' or 'timeout'
-//      - response: only if the type is response, with properties
-//              - statusCode
-//              - headers
-//              - body
+//      - response: only if the type is 'response', with object properties:
+//            * statusCode
+//            * headers
+//            * body
 //
-// v0.3.0
+// v0.3.1
 //
 function request(method, url, options) {
     // Tropo Emulator friendly: inject the trequest function when script is run locally
@@ -36,7 +37,7 @@ function request(method, url, options) {
     if (!method || !url) {
         throw Error("Invalid arguments, expecting method & url at a minimum");
     }
-    if (method !== "GET") {
+    if ((method !== "GET") && (method !== "POST") && (method !== "PUT") && (method !== "DELETE") && (method !== "PATCH")) {
         throw Error("Method " + method + " is not supported");
     }
 
@@ -54,27 +55,44 @@ function request(method, url, options) {
         connection.setConnectTimeout(timeout);
         connection.setReadTimeout(timeout);
 
-        if (options.headers) {
-            for (var property in options.headers) {
-                if (options.hasOwnProperty(property)) {
-                    // add header
-                    var value = options.headers[property];
-                    if (typeof value !== "string") {
-                        log("REQUEST: headers property: " + property + " does not contain a string, ignoring...");
-                    }
-                    else {
-                        connection.setRequestProperty(property, value);
-                    }
-                }
-            }
-        }
-
-        connection.setDoOutput(false);
         connection.setDoInput(true);
         connection.setRequestMethod(method);
         connection.setInstanceFollowRedirects(false);
 
-        connection.connect();
+        if (options.headers) {
+            for (var key in options.headers) {
+                if (options.headers.hasOwnProperty(key)) {
+                    // add header
+                    var value = options.headers[key];
+                    if (typeof value !== "string") {
+                        log("REQUEST: headers key: " + key + " does not contain a string, ignoring...");
+                    }
+                    else {
+                        log("REQUEST: adding header: " + key + ", value: " + value);
+                        connection.setRequestProperty(key, value);
+                    }
+                }
+            }
+        }
+        if (options.json) {
+             connection.setRequestProperty("Content-Type", "application/json");
+        }
+        
+        if (options.body) {
+            connection.setDoOutput(true);
+            var bodyWriter = new java.io.DataOutputStream(connection.getOutputStream());
+            var contents = options.body;
+            if (options.json) {
+                contents = JSON.stringify(options.body);
+            }
+            bodyWriter.writeBytes(contents);
+            bodyWriter.flush();
+            bodyWriter.close();
+        }
+        else {
+            connection.setDoOutput(false);
+            connection.connect();
+        }
 
         var statusCode = connection.getResponseCode();
         result.response = { statusCode: statusCode };
@@ -89,34 +107,33 @@ function request(method, url, options) {
         }
         else if ((statusCode >= 400) && (statusCode < 600)) {
             var bodyReader = connection.getErrorStream();
-
-            // [WORKAROUND] We cannot use a byte[], not supported on Tropo
-            // var myContents= new byte[1024*1024];
-            // bodyReader.readFully(myContents);
-            contents = new String(org.apache.commons.io.IOUtils.toString(bodyReader));
-        }
-        else {
-            // No contents
-            contents = null;
+            if (bodyReader) {
+                contents = new String(org.apache.commons.io.IOUtils.toString(bodyReader));
+            }
         }
 
-        // Return response
         result.response.body = contents;
+        
+        // Invoke response callback
         if (options.onResponse) {
             options.onResponse(result.response);
         }
 
+        // Return response
         result.type = "response";
         return result;
     }
-    catch (err1) {
-        log("REQUEST: could not reach url, err: " + err1.message);
+    catch (err) {
+        log("REQUEST: could not reach url, err: " + err.message);
+
+        // Invoke error callback
         if (options.onError) {
-            options.onError(err1);
+            options.onError(err);
         }
 
+        // Return response
         result.type = "error";
-        result.error = err1;
+        result.error = err;
         return result;
     }
 }
