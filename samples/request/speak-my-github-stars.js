@@ -150,10 +150,10 @@ function request(method, url, options) {
 answer();
 wait(1000);
 
-say("Welcome to Github Stars !")
+say("Welcome to Guithub Stars !"); // [WORKAROUND] Changed to Guithub to enhance pronounciation
 wait(1000);
 
-say("Asking GitHub...")
+say("Asking GuitHub...");
 
 var account = "ObjectIsAdvantag";
 var project = "tropo-ready-vscode";
@@ -165,12 +165,12 @@ var result = request("GET", "https://api.github.com/repos/" + account + "/" + pr
     timeout: 10000,
     onTimeout: function () {
         log("could not contact Github, timeout");
-        say("sorry could not contact Github, try again later...");
+        say("sorry could not contact Guithub, try again later...");
         hangup();
     },
     onError: function (err) {
         log("could not contact Github, err: " + err.message);
-        say("sorry could not contact Github, try again later...");
+        say("sorry could not contact Guithub, try again later...");
         hangup();
     }
 });
