@@ -138,63 +138,88 @@ function request(method, url, options) {
 ///////////////////////////////////////////////////////////////////////////////////////
 
 
+
+// Watch out: this is an I18N IVR in French
 // 
-// This script texts the current number of stars for a github project
+// This script speaks the current number of stars for a github project
 //    - star/unstar the project on github and listen to the changes in real time
-//    - uses the trequest library to forge HTTP requests
+//    - uses the request library to forge HTTP requests
 //
+// It speaks the number of stars 10 times with a 20 seconds interruption to hear people votes in real time
+//
+// As a bonus, typing 2 lets the caller change the voice from Male to Female.
 
-if (currentCall) {
 
-    var splitted = currentCall.initialText.split(" ");
-    if (splitted.length != 2) {
-        say("Please specify a Github account and a project");
-        throw Error("terminating");
-    }
+answer();
 
-    var account = splitted[0];
-    var project = splitted[1];
-    log("fetching GitHub starts for: " + account + "/" + project);
+wait(1000);
+var currentVoice = "Thomas";
+say("Bienvenue sur Guiteub Starze !", { voice: currentVoice });
+wait(1000);
 
-    request("GET", "https://api.github.com/repos/" + account + "/" + project, {
+var account = "ObjectIsAdvantag";
+var project = "tropo-ready-vscode";
+
+var loops_avoider = 0;
+while (loops_avoider++ < 5) {
+    say("C'est parti, j'interroge 'Guiteub' pour le projet 'Tropo Ready V S Code'", { voice: currentVoice });
+
+    var result = request("GET", "https://api.github.com/repos/" + account + "/" + project, {
         headers: {
             // Github administrative rule: mandatory User-Agent header (http://developer.github.com/v3/#user-agent-required
-            'User-Agent': 'Tropo'
+            'User-Agent': 'Tropo Scripting'
         },
-        timeout: 10000,
+        timeout: 5000,  // 5 seconds
         onTimeout: function () {
             log("could not contact Github, timeout");
-            say("sorry could not contact Github, try again later...");
+            say("Pas de chance, je n'arrive pas à contacter Guiteub. Re-essaye plus tard...", { voice: currentVoice });
             hangup();
         },
         onError: function (err) {
             log("could not contact Github, err: " + err.message);
-            say("sorry could not contact Github, try again later...");
+            say("Saperlipopette, je n'arrive pas à contacter Guiteub...", { voice: currentVoice });
             hangup();
-        },
-        onResponse: function (response) {
-            switch (response.statusCode) {
-                case 200:
-                    var info = JSON.parse(response.body);
-                    log("fetched " + info.stargazers_count + " star(s)");
-                    say("Congrats, " + project + " counts " + info.stargazers_count + " stars on Github");
-                    break;
-
-                case 404:
-                    log("project not found");
-                    say("Sorry, Github project not found. Please check Github account and repository name");
-                    break;
-
-                default:
-                    log("wrong answer from Github, status code: " + response.statusCode);
-                    say("Sorry, could not fetch your project Github's stars. Check https://github.com/" + account + "/" + project);
-                    break;
-            }
         }
     });
 
+    if (result.type == "response") {
+        switch (result.response.statusCode) {
+            case 200:
+                var info = JSON.parse(result.response.body);
+                log("fetched " + info.stargazers_count + " star(s)");
+                say("Félicitations, ton projet a déjà " + info.stargazers_count + " étoiles", { voice: currentVoice });
+                break;
+            default:
+                log("github returned statusCode: " + result.response.statusCode);
+                say("Désolé, je n'ai pas réussi à récupérer le nombre d'étoiles pour ton projet Guiteub...", { voice: currentVoice });
+                break;
+        }
+    }
+
+    wait(1000);
+    var result = ask("Allez, tu as 20 secondes pour voter... tape 1 lorsque tu as terminé", {
+        choices: "1, 2",
+        timeout: 20, // 20 seconds
+        voice: currentVoice,
+        onTimeout: function() {
+            say("Délai écoulé !", { voice: currentVoice });
+            wait(1000);
+        } 
+    });
+
+    if (result.name == 'choice') {
+        if (result.value == "1") { 
+            say("Merci pour ton vote.", { voice: currentVoice });
+            wait(1000);
+        }
+        if (result.value == "2") { 
+            say("Quoi ? Tu n'aimes pas ma voix !", { voice: currentVoice });
+            wait(1000);
+            currentVoice = "Audrey"
+            say("Et là ! c'est mieux ?", { voice: currentVoice });
+            wait(1000);
+        }
+    }
 }
-else {
-    call(toNumber, { "network": "SMS" });
-    say("Reply with your Github account and project name to receive its stars, exemple: CiscoDevNet awesome-ciscospark");
-}
+
+hangup();

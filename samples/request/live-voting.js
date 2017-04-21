@@ -138,63 +138,118 @@ function request(method, url, options) {
 ///////////////////////////////////////////////////////////////////////////////////////
 
 
-// 
-// This script texts the current number of stars for a github project
-//    - star/unstar the project on github and listen to the changes in real time
-//    - uses the trequest library to forge HTTP requests
 //
-
-if (currentCall) {
-
-    var splitted = currentCall.initialText.split(" ");
-    if (splitted.length != 2) {
-        say("Please specify a Github account and a project");
-        throw Error("terminating");
+// Cisco Spark ChatOps
+//
+function ChatOps(token, roomId, timeout) {
+    if (!token || !roomId) {
+        log("CHATOPS: bad arguments, will not log");     
+    }
+    else {
+        this.token = token;
+        this.roomId = roomId;
     }
 
-    var account = splitted[0];
-    var project = splitted[1];
-    log("fetching GitHub starts for: " + account + "/" + project);
+    // Defaults to 10s
+    if (!timeout) {
+        this.timeout = 10000;
+    }
+    else {
+        this.timeout = timeout;
+    }
+}
 
-    request("GET", "https://api.github.com/repos/" + account + "/" + project, {
+// Logs a message to a Cisco Spark room in markdown by default
+//    - isText: boolean to push your message as raw text
+ChatOps.prototype.log = function(msg, isText) {
+    if (!this.token || !this.roomId || !msg) {
+        return;
+    }
+
+    var payload = { roomId: this.roomId };
+    if (isText) {
+        payload.text = msg;
+    }
+    else {
+        payload.markdown = msg;
+    }
+
+    var result = request("POST", "https://api.ciscospark.com/v1/messages", {
         headers: {
-            // Github administrative rule: mandatory User-Agent header (http://developer.github.com/v3/#user-agent-required
-            'User-Agent': 'Tropo'
+            "Authorization" : "Bearer " + this.token
         },
-        timeout: 10000,
+        json: true,
+        body: payload,
+        timeout: this.timeout,
         onTimeout: function () {
-            log("could not contact Github, timeout");
-            say("sorry could not contact Github, try again later...");
-            hangup();
+            log("CHATOPS: could not contact CiscoSpark, timeout");
         },
         onError: function (err) {
-            log("could not contact Github, err: " + err.message);
-            say("sorry could not contact Github, try again later...");
-            hangup();
+            log("CHATOPS: could not contact CiscoSpark, err: " + err.message);
         },
         onResponse: function (response) {
-            switch (response.statusCode) {
-                case 200:
-                    var info = JSON.parse(response.body);
-                    log("fetched " + info.stargazers_count + " star(s)");
-                    say("Congrats, " + project + " counts " + info.stargazers_count + " stars on Github");
-                    break;
-
-                case 404:
-                    log("project not found");
-                    say("Sorry, Github project not found. Please check Github account and repository name");
-                    break;
-
-                default:
-                    log("wrong answer from Github, status code: " + response.statusCode);
-                    say("Sorry, could not fetch your project Github's stars. Check https://github.com/" + account + "/" + project);
-                    break;
+            if (response.statusCode != 200) {
+                log("CHATOPS: could not log to CiscoSpark, statusCode: " + response.statusCode);
+                if (response.body) {
+                    log("CHATOPS: could not log to CiscoSpark, payload: " + response.body);
+                }
             }
         }
     });
+}
 
+
+// 
+// This script lets people vote live at a conference
+// Each vote populates a Cisco Spark Room
+// As a bonus, typing 3 lets the caller change the voice from Male to Female.
+//
+
+// Here are some guidelines to do ChatOps for Tropo Inbound calls
+//   - Create a bot account and paste its access token 
+var sparkToken = "CISCO_SPARK_API_ACCESS_TOKEN";
+
+//   - Create a room, and paste the room id here
+var sparkRoom = "ROOM_IDENTIFIER";
+
+// and don't forget to add your bot to the Cisco Spark room
+var chatops = new ChatOps(sparkToken, sparkRoom);
+
+
+currentVoice = "Tom";
+say("Welcome to our awesome developer conference", { voice: currentVoice });
+
+var voted = false;
+var loops_avoider = 0;
+while ((!voted) && (loops_avoider < 5)) {
+    var result = ask("If you attend every year, press 1. If it's your first time here, press 2", {
+        choices: "1, 2, 3",
+        mode: "dtmf", // dtmf, speech or any
+        timeout: 20,
+        voice: currentVoice
+    });
+
+    if (result.name == 'choice') {
+        if (result.value == "1") {
+            voted = true;
+            chatops.log("Every year for: " + currentCall.callerID.substring(5, 10));
+            say("Congrats, we are so lucky to count you in again this year", { voice: currentVoice })
+        }
+        if (result.value == "2") {
+            voted = true;
+            chatops.log("First time for: " + currentCall.callerID.substring(5, 10));
+            say("Let's hope we see you again next year", { voice: currentVoice })
+        }
+        if (result.value == "3") {
+            say("What? you don't like my Voice ?", { voice: currentVoice });
+            wait(1000);
+            currentVoice = "Susan";
+            wait(500);
+            say("And now, is it better ?", { voice: currentVoice });
+        }
+    }
+
+    loops_avoider++;
 }
-else {
-    call(toNumber, { "network": "SMS" });
-    say("Reply with your Github account and project name to receive its stars, exemple: CiscoDevNet awesome-ciscospark");
-}
+
+say("Thanks for you vote, and see you next year...", { voice: currentVoice });

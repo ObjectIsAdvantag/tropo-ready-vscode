@@ -6,26 +6,27 @@
 
 
 ////////////////////////////////////////////////////////////////////////////////////
-// request: a synchronous HTTP client library for Tropo, built in the 'request' style
+// request:
+//     a synchronous HTTP client library for Tropo, built in the "request" style
 //
-// forges an HTTP request towards the specified URL, and invokes the callback
+// forges an HTTP request towards the specified URL
 //      - method: GET, POST, PUT, DELETE or PATCH
 //      - url: Http endpoint you wish to hit
 //      - options lets you specify HTTP headers, timeouts... and callbacks
 //            * headers: set of HTTP key/values pairs
 //            * timeout: enforces Connect and Read timeouts, defaults to 10s
-//            * onTimeout(): fired if the timeout  expires
-//            * onError(err): fires if an error occured
-//            * onResponse(response): fires if the request is successful, see below for Response structure
+//            * onTimeout(): function fired if the timeout  expires
+//            * onError(err): function fired if an error occured
+//            * onResponse(response): function fired if the request is successful, see below for the structure of the response
 //
 // returns a result object with properties :
 //      - type: 'response', 'error' or 'timeout'
 //      - response: only if the type is 'response', with object properties:
-//            * statusCode
-//            * headers
-//            * body
+//            * statusCode: integer
+//            * headers: map of key/values pairs, values are either strings or arrays depending on the header
+//            * body: string
 //
-// v0.3.1
+// v0.4.0
 //
 function request(method, url, options) {
     // Tropo Emulator friendly: inject the trequest function when script is run locally
@@ -68,7 +69,6 @@ function request(method, url, options) {
                         log("REQUEST: headers key: " + key + " does not contain a string, ignoring...");
                     }
                     else {
-                        log("REQUEST: adding header: " + key + ", value: " + value);
                         connection.setRequestProperty(key, value);
                     }
                 }
@@ -80,12 +80,12 @@ function request(method, url, options) {
         
         if (options.body) {
             connection.setDoOutput(true);
-            var bodyWriter = new java.io.DataOutputStream(connection.getOutputStream());
-            var contents = options.body;
+            var payload = options.body;
             if (options.json) {
-                contents = JSON.stringify(options.body);
+                payload = JSON.stringify(options.body);
             }
-            bodyWriter.writeBytes(contents);
+            var bodyWriter = connection.getOutputStream();
+            org.apache.commons.io.IOUtils.write(payload, bodyWriter, "UTF-8");
             bodyWriter.flush();
             bodyWriter.close();
         }
@@ -97,21 +97,18 @@ function request(method, url, options) {
         var statusCode = connection.getResponseCode();
         result.response = { statusCode: statusCode };
 
+        // Read response if exists
+        var contents;
         if ((statusCode >= 200) && (statusCode < 300)) {
             var bodyReader = connection.getInputStream();
-
-            // [WORKAROUND] We cannot use a byte[], not supported on Tropo
-            // var myContents= new byte[1024*1024];
-            // bodyReader.readFully(myContents);
-            contents = new String(org.apache.commons.io.IOUtils.toString(bodyReader));
+            contents = new String(org.apache.commons.io.IOUtils.toString(bodyReader, "UTF-8"));
         }
         else if ((statusCode >= 400) && (statusCode < 600)) {
             var bodyReader = connection.getErrorStream();
             if (bodyReader) {
-                contents = new String(org.apache.commons.io.IOUtils.toString(bodyReader));
+                contents = new String(org.apache.commons.io.IOUtils.toString(bodyReader, "UTF-8"));
             }
         }
-
         result.response.body = contents;
         
         // Invoke response callback
@@ -140,16 +137,25 @@ function request(method, url, options) {
 //
 ///////////////////////////////////////////////////////////////////////////////////////
 
+
 //
 // Cisco Spark ChatOps
 //
-function ChatOps(token, roomId) {
+function ChatOps(token, roomId, timeout) {
     if (!token || !roomId) {
         log("CHATOPS: bad arguments, will not log");     
     }
     else {
         this.token = token;
         this.roomId = roomId;
+    }
+
+    // Defaults to 10s
+    if (!timeout) {
+        this.timeout = 10000;
+    }
+    else {
+        this.timeout = timeout;
     }
 }
 
@@ -174,7 +180,7 @@ ChatOps.prototype.log = function(msg, isText) {
         },
         json: true,
         body: payload,
-        timeout: 10000,
+        timeout: this.timeout,
         onTimeout: function () {
             log("CHATOPS: could not contact CiscoSpark, timeout");
         },
@@ -183,9 +189,10 @@ ChatOps.prototype.log = function(msg, isText) {
         },
         onResponse: function (response) {
             if (response.statusCode != 200) {
-                log("CHATOPS: could not log to CiscoSpark");
-                log("CHATOPS: statusCode: " + response.statusCode);
-                log("CHATOPS: message: " + JSON.parse(response.body).message);
+                log("CHATOPS: could not log to CiscoSpark, statusCode: " + response.statusCode);
+                if (response.body) {
+                    log("CHATOPS: could not log to CiscoSpark, payload: " + response.body);
+                }
             }
         }
     });
@@ -196,7 +203,7 @@ if (currentCall) {
 
     // Here are some guidelines to do ChatOps for Tropo Inbound calls
     //   - Create a bot account and paste its access token 
-    var sparkToken = "MzFhMmNjMzMtM2Y0OS00Mjg4LTg0NDQtM2Y4YjA3MTA2NWEwOTcyZGUwOGQtY2I0";
+    var sparkToken = "CISCO_SPARK_API_ACCESS_TOKEN";
     //   - Create a room, and paste the room id here
     var sparkRoom = "ROOM_IDENTIFIER"; 
     // and don't forget to add the bot to the roomId
@@ -204,6 +211,8 @@ if (currentCall) {
     chatops.log("New incoming call from " + currentCall.callerID);    
 }
 else { // OutBound call from Application's token URL
+
+    // the Cisco Spark token and room identifier are expected to be passed by value
     var chatops = new ChatOps(sparkToken, sparkRoom);
     chatops.log("Tropo ChatOps script v0.1");    
 }
