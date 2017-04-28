@@ -6,7 +6,7 @@ The Javascript samples have been enhanced with :
 - declarations for local variables to make debugging more convenient (ie, introspection of variables),
 - modification of a loop that was leveraging hangup event to break (see [17-collectmoredigits](17-collectmoredigits))
 - extra outbound samples ([send-sms](send-sms.js), [bidirectional-sms](bidirectional-sms.js), [transfer-outbound](transfer-outbound.js))
-- examples making REST client calls with an [experimental library](https://github.com/ObjectIsAdvantag/tropo-emulator-js#http-client-api-calls): [speak-my-github-stars](request/speak-my-github-stars.js), [live-voting](request/live-voting.js)
+- examples making REST client calls with the [Tropo request experimental library](https://github.com/ObjectIsAdvantag/tropo-emulator-js#http-client-api-calls): [speak-my-github-stars](request/speak-my-github-stars.js), [live-voting](request/live-voting.js)
 
 
 ## Quick start

@@ -39,7 +39,7 @@ Then, launch Visual Studio Code, and open the 'tropo-ready-vscode' project.
 _Note that if you've setup the VS Code shortcut, simply type `code .` in the tropo-ready-vscode directory of the terminal above._
 
 
-Reach to a provided Tropo script sample, such as [02-askforinput](samples/tutorial/02-askforinput.js)
+Reach to a provided Tropo script sample, such as [02-askforinput](samples/javascript/tutorial/02-askforinput.js)
 
 Add a breakpoint on line 9, and press F5 to start a debugging session.
 
@@ -78,7 +78,7 @@ To pass parameters, try:
    > tropoready <your-script.js> --parameters "phonenumber=+33678007800" "msg=Hello world!"
 ```
 
-Then, open a provided Tropo script sample, such as [02-askforinput](samples/tutorial/02-askforinput.js), 
+Then, open a provided Tropo script sample, such as [02-askforinput](samples/javascript/tutorial/02-askforinput.js), 
 
 Launch the Tropo Ready tasks by pressing `ctrl+P`, enter `Tasks: Run task` and select `Inbound Voice Tropo test`.
 
@@ -106,4 +106,4 @@ Drop us a message if interested, we'll be happy to contribute!
 
 ## Spread the word
 
-Call +1-888-241-5444 (tool free) for a fun voting experience! like it? [check the code](https://github.com/ObjectIsAdvantag/tropo-ready-vscode/blob/master/samples/request/speak-stars-with-chatops.js). 
+Call +1-888-241-5444 (tool free) for a fun voting experience! like it? [check the code](https://github.com/ObjectIsAdvantag/tropo-ready-vscode/blob/master/samples/javascript/request/speak-stars-with-chatops.js). 
