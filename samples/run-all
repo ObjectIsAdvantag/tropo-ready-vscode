@@ -36,4 +36,7 @@ tropoready say-as-demo.js
 tropoready send-sms.js --outbound --parameters "toNumber=+33678007800" "msg=hello friends"
 #tropoready transfer.js
 tropoready request/speak-my-github-stars.js --callerID "+336780078XX"
-tropoready request/text-my-github-stars.js --SMS --initialText "CiscoDevNet awesome-ciscospark"
+tropoready request/text-stars.js --SMS --initialText "CiscoDevNet awesome-ciscospark"
+tropoready request/speak-stars-with-chatops.js --callerID "+336780078XX"
+tropoready request/live-voting.js --callerID "+336780078XX"
+tropoready request/chatops-to-ciscospark.js --callerID "+336780078XX"

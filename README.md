@@ -1,14 +1,34 @@
-# Tropo Ready: the live coding experience for Tropo Scripting
+# Tropo Ready! the live coding experience for Tropo Scripting
 
-Execute, Test or Debug your Tropo scripts from your local machine, thanks to a set of handy tools:
-- have Tropo Scripting execute your local scripts thanks to a [Caddy+ngrok combo](#tropo-scripts-live-execution)
-- debug your scripts thanks to the [Tropo Emulator for Javascript](#tropo-scripts-debugging)
-- check your [JS scripts are consistent](#tropo-scripts-testing) before pushing them to Tropo
+Run, test and debug your Tropo scripts from your local machine, thanks to a set of handy tools:
+- have Tropo execute your local scripts thanks to a [Caddy+ngrok combo](#tropo-scripts-live-execution)
+- debug your scripts locally thanks to the [Tropo Emulator for Javascript](#tropo-scripts-debugging)
+- test your [JS scripts ](#tropo-scripts-testing) before pushing them to Tropo Scripting platform.
 
 ![Tropo Ready Big Picture](docs/tropo-ready-big-picture.png)
 
 
-## Quickstart
+
+## Live Test your Tropo scripts (any language)
+
+Follow these [instructions to create a live tunnel](tunnel/README.md) between the Tropo Scripting platform and your local machine:
+
+![Tropo Ready Tunnel](docs/launch-caddy-ngrok-combo.png)
+
+
+Then, create a Tropo Scripting application that reads scripts from the tunnel:
+
+![Tropo Scripting Application](docs/tropo-script-served-via-tunnel.png)
+
+
+Now, press 'ctrl+shift+B' to publish your script to Tropo via the `tunnel/tropo/live` folder on your local machine.
+
+You're all set: call your application's Tropo number and listen to your scripts live!
+
+
+## Debug your Tropo scripts from VS Code (JS only)
+
+Open a terminal and type:
 
 ```shell
 > git clone https://github.com/ObjectIsAdvantag/tropo-ready-vscode
@@ -16,43 +36,27 @@ Execute, Test or Debug your Tropo scripts from your local machine, thanks to a s
 > npm install
 ```
 
-Now launch VS Code, open the 'tropo-ready-vscode' project, open file /samples/tutorial/02-askforinput.js,
-and press F5 to start a debugging session.
+Then, launch Visual Studio Code, and open the 'tropo-ready-vscode' project.
+_Note that if you've setup the VS Code shortcut, simply type `code .` in the tropo-ready-vscode directory of the terminal above._
 
-If you've installed the VS Code shortcut, simply type `code .` in the tropo-ready-vscode directory from the terminal.
-
-
-## Debug your Tropo scripts from VS Code
-
-_If not already done, type npm install on the command line._
 
 Reach to a provided Tropo script sample, such as [02-askforinput](samples/tutorial/02-askforinput.js)
 
-Add a breakpoint on line 9 for example, and press F5 to start a debugging session.
+Add a breakpoint on line 9, and press F5 to start a debugging session.
 
-The Tropo emulator starts a Tropo Outbound Voice call, with your [workspace default settings](.vscode/settings.json).
-
-Note that Tropo Ready proposes other launch configurations, pick the one that suits the Tropo script you're launching.
+The Tropo emulator starts a Tropo Outbound Voice call.
 
 ![Tropo Ready Launch Configurations](docs/tropo-launch-configurations.png)
 
 
-## Live Test your Tropo scripts
-
-Follow these [instructions to create a live tunnel](tunnel/README.md) to the Tropo Cloud platform,
-
-![Tropo Ready Tunnel](docs/launch-caddy-ngrok-combo.png)
-
-Once you have created a Tropo Scripting application reading from the tunnel,
-press ctrl+shift+B to publish your script to Tropo via the `tunnel/tropo/live` folder.
-
-![Tropo Scripting Application](docs/tropo-script-served-via-tunnel.png)
+_Note that Tropo Ready! can help you debug Inbound/Outbound and Voice/SMS scripts: simply pick a [VS Code launch configuration]((.vscode/settings.json) and customize it to match your test needs_
 
 
-## Continuous Integration Testing for Tropo scripts
 
-_If not already done, install the `tropoready` command on your machine (the command comes with the tropo-emulator-js project)._
+## Testing for Tropo scripts from VS Code (JS only)
 
+If not already done, use npm to install the `tropoready` command on your machine. 
+The tropoready command comes with the [tropo-emulator-js project documented here](https://github.com/ObjectIsAdvantag/tropo-emulator-js#how-to-test-for-inboundoutbound-tropo-calls-for-voice-or-sms).
 
 ```shell
 # On Windows
@@ -61,17 +65,29 @@ _If not already done, install the `tropoready` command on your machine (the comm
 > sudo npm install tropo-emulator-js -g
 # Check it is working ok
 > tropoready -v
+v0.4.0 (or above)
+> tropoready -h
+Usage: tropoready [--script] <your-script.js>
+
+Simulates a Tropo runtime environment to quickly check for obvious inconsistencies (syntax error, wrong arguments).
+By default, starts the specified script in the context of a Tropo Inbound Voice call.
+
+To test for an Outbound SMS call, try:
+   > tropoready <your-script.js> --outbound --SMS
+
+To pass parameters, try:
+   > tropoready <your-script.js> --parameters "phonenumber=+33678007800" "msg=Hello world!"
 ```
 
-Open a provided Tropo script sample, such as [02-askforinput](samples/tutorial/02-askforinput.js), 
+Then, open a provided Tropo script sample, such as [02-askforinput](samples/tutorial/02-askforinput.js), 
 
 Launch the Tropo Ready tasks by pressing `ctrl+P`, enter `Tasks: Run task` and select `Inbound Voice Tropo test`.
-Note that you can [install the ctrl+shift+y key binding](vscode/README.md) to easilly reach to the Tropo Ready Tasks.
 
 Now, look at the Tropo Emulator results in the Output window:
 
 ![Tropo Ready Tasks](docs/tropo-ready-tasks.png)
 
+_Note that you can [install the ctrl+shift+y key binding](vscode/README.md) to easilly reach to the Tropo Ready! Tasks._ 
 
 
 # Contribute
