@@ -1,12 +1,11 @@
 # Tropo Ready! the live coding experience for Tropo Scripting
 
 Run, test and debug your Tropo scripts from your local machine, thanks to a set of handy tools:
-- have Tropo execute your local scripts thanks to a [Caddy+ngrok combo](#tropo-scripts-live-execution)
-- debug your scripts locally thanks to the [Tropo Emulator for Javascript](#tropo-scripts-debugging)
-- test your [JS scripts ](#tropo-scripts-testing) before pushing them to Tropo Scripting platform.
+- [have Tropo execute your local scripts](#live-test-your-tropo-scripts-any-language) thanks to a Caddy+ngrok combo,
+- [debug your scripts locally](#debug-your-tropo-scripts-from-vs-code-js-only) thanks to the Tropo Emulator for Javascript,
+- [test your JS scripts](#testing-for-tropo-scripts-from-vs-code-js-only) from VS Code before pushing them to Tropo Scripting platform.
 
 ![Tropo Ready Big Picture](docs/tropo-ready-big-picture.png)
-
 
 
 ## Live Test your Tropo scripts (any language)
@@ -87,7 +86,7 @@ Now, look at the Tropo Emulator results in the Output window:
 
 ![Tropo Ready Tasks](docs/tropo-ready-tasks.png)
 
-_Note that you can [install the ctrl+shift+y key binding](vscode/README.md) to easilly reach to the Tropo Ready! Tasks._ 
+_Note that you can [install the `ctrl+shift+y` key binding](vscode/Install.md) to easilly reach to the Tropo Ready! Tasks._ 
 
 
 # Contribute
@@ -104,14 +103,7 @@ Please, OPEN an issue and post your script raw contents, as this is the default 
 Simply fork the Tropo emulator project, and start your own version for your favorite language.
 Drop us a message if interested, we'll be happy to contribute!
 
-And if you like the project, don't forget to twitt or write about it ;-)
 
+## Spread the word
 
-
-
-
-
-
-
-
-
+Call +1-888-241-5444 (tool free) for a fun voting experience! like it? [check the code](https://github.com/ObjectIsAdvantag/tropo-ready-vscode/blob/master/samples/request/speak-stars-with-chatops.js). 
