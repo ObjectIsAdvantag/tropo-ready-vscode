@@ -14,17 +14,15 @@ Execute, Test or Debug your Tropo scripts from your local machine, thanks to a s
 > git clone https://github.com/ObjectIsAdvantag/tropo-ready-vscode
 > cd tropo-ready-vscode
 > npm install
-
-# Add the tropoready command to check script inconsistencies from the command line
-> npm install tropo-emulator-js -g
-> tropoready -v
-
-# Now launch VS Code, open samples/tutorial/02-askforinput.js, and press F5
-> code .
 ```
 
+Now launch VS Code, open the 'tropo-ready-vscode' project, open file /samples/tutorial/02-askforinput.js,
+and press F5 to start a debugging session.
 
-## Tropo scripts Debugging
+If you've installed the VS Code shortcut, simply type `code .` in the tropo-ready-vscode directory from the terminal.
+
+
+## Debug your Tropo scripts from VS Code
 
 _If not already done, type npm install on the command line._
 
@@ -39,12 +37,28 @@ Note that Tropo Ready proposes other launch configurations, pick the one that su
 ![Tropo Ready Launch Configurations](docs/tropo-launch-configurations.png)
 
 
-## Tropo scripts Testing
+## Live Test your Tropo scripts
+
+Follow these [instructions to create a live tunnel](tunnel/README.md) to the Tropo Cloud platform,
+
+![Tropo Ready Tunnel](docs/launch-caddy-ngrok-combo.png)
+
+Once you have created a Tropo Scripting application reading from the tunnel,
+press ctrl+shift+B to publish your script to Tropo via the `tunnel/tropo/live` folder.
+
+![Tropo Scripting Application](docs/tropo-script-served-via-tunnel.png)
+
+
+## Continuous Integration Testing for Tropo scripts
 
 _If not already done, install the `tropoready` command on your machine (the command comes with the tropo-emulator-js project)._
 
+
 ```shell
+# On Windows
 > npm install tropo-emulator-js -g
+# On Mac
+> sudo npm install tropo-emulator-js -g
 # Check it is working ok
 > tropoready -v
 ```
@@ -57,24 +71,6 @@ Note that you can [install the ctrl+shift+y key binding](vscode/README.md) to ea
 Now, look at the Tropo Emulator results in the Output window:
 
 ![Tropo Ready Tasks](docs/tropo-ready-tasks.png)
-
-
-## Tropo scripts Live Execution
-
-Follow these [instructions to create a live tunnel](tunnel/README.md) to the Tropo Cloud platform,
-
-![Tropo Ready Tunnel](docs/launch-caddy-ngrok-combo.png)
-
-Once you have created a Tropo Scripting application reading from the tunnel,
-press ctrl+shift+B to publish your script to Tropo via the `tunnel/tropo/live` folder.
-
-![Tropo Scripting Application](docs/tropo-script-served-via-tunnel.png)
-
-
-## Add Tropo Ready to an existing workspace
-
-If you want to add the Tropo Ready customizations to an existing VS Code Workspace,
-check instructions in the [vscode folder](vscode/README.md).
 
 
 
