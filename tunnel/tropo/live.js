@@ -6,7 +6,10 @@
 
 answer();
 
-var result = ask("Hi. For sales, press 1. For support, press 2.", { choices: "1, 2" });
+var result = ask("Hi. For sales, press 1. For support, press 2.", {
+	choices: "1, 2",
+	mode: "dtmf"
+});
 
 if (result.name == 'choice') {
 	if (result.value == "1") { say("sales is not available right now.") }
